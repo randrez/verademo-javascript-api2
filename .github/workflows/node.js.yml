@@ -32,6 +32,5 @@ jobs:
   
     - name: Zip the build output
       run: |
-        cd ${{ github.repository }} 
-        zip -r ../build.zip .
+        zip -r build.zip .
     
