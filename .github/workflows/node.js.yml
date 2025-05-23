@@ -35,8 +35,13 @@ jobs:
             $exclude -notcontains $_.DirectoryName.Split('\')[-1]
           }
           Compress-Archive -Path $files.FullName -DestinationPath output/build.zip
-  
-  
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: output/build.zip
+
   upload-scan:
     needs: checkout-and-package
     runs-on: ubuntu-latest
@@ -46,7 +51,7 @@ jobs:
         with:
           name: build
           path: output
-  
+
       - name: Veracode Upload And Scan
         uses: veracode/veracode-uploadandscan-action@0.2.6
         with:
