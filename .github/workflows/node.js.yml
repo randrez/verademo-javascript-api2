@@ -18,10 +18,18 @@ jobs:
         node-version: [18.x]
 
     steps:
+
+     - uses: actions/checkout@v4
     
+     - name: Use Node.js ${{ matrix.node-version }}
+       uses: actions/setup-node@v4
+       with:
+         node-version: ${{ matrix.node-version }}
+         cache: 'npm'
+         
      - name: Install dependencies
        run: npm install
-
+    
      - name: Crear carpeta de salida
        run: mkdir -p output
 
@@ -35,12 +43,11 @@ jobs:
           name: build
           path: output/build.zip
 
-
      - name: Veracode Upload And Scan
        uses: veracode/veracode-uploadandscan-action@0.2.6
        with:
           appname: "verademo-javascript-api"
-          filepath: ${{ github.repository }}
+          filepath: ./output
           version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
