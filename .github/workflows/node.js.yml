@@ -35,7 +35,12 @@ jobs:
             $exclude -notcontains $_.DirectoryName.Split('\')[-1]
           }
           Compress-Archive -Path $files.FullName -DestinationPath output/build.zip
-
+  
+  
+  upload-scan:
+    runs-on: ubuntu-latest
+    steps:
+    
       - name: Subir artifact de build
         uses: actions/upload-artifact@v4
         with:
