@@ -41,18 +41,17 @@ jobs:
     needs: checkout-and-package
     runs-on: ubuntu-latest
     steps:
-    
-      - name: Subir artifact de build
-        uses: actions/upload-artifact@v4
+      - name: Descargar build artifact
+        uses: actions/download-artifact@v4
         with:
           name: build
-          path: output/build.zip
-
+          path: output
+  
       - name: Veracode Upload And Scan
         uses: veracode/veracode-uploadandscan-action@0.2.6
         with:
           appname: "verademo-javascript-api"
-          filepath: ./output
+          filepath: ./output/build.zip
           version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
