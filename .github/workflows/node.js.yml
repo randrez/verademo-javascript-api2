@@ -21,18 +21,8 @@ jobs:
     
     - uses: actions/checkout@v4
     
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-  
-    - name: Install dependencies
-      run: npm install
-  
-    - name: Zip the build output
-      run: |
-        zip -r build.zip . -x "node_modules/*"
+    - name: Comprimir excluyendo .github, .git y node_modules
+      run: zip -r archivo.zip . -x ".github/*" ".git/*" "node_modules/*"
 
     - name: Veracode Upload And Scan
       uses: veracode/veracode-uploadandscan-action@0.2.6
