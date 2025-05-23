@@ -28,7 +28,6 @@ jobs:
       uses: veracode/veracode-uploadandscan-action@0.2.6
       with:
         appname: "verademo-javascript-api"
-        createprofile: false
         filepath: ${{ github.repository }}
         version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
         vid: ${{ secrets.VERACODE_API_ID }}
@@ -36,6 +35,5 @@ jobs:
         scanallnonfataltoplevelmodules: true
         deleteincompletescan: true
         debug: true
-        scanpollinginterval: 30
       continue-on-error: false
     
