@@ -1,51 +1,50 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on:
   push:
     branches: [ "main" ]
 
-
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     strategy:
       matrix:
         node-version: [18.x]
 
     steps:
+      - uses: actions/checkout@v4
 
-     - uses: actions/checkout@v4
-    
-     - name: Use Node.js ${{ matrix.node-version }}
-       uses: actions/setup-node@v4
-       with:
-         node-version: ${{ matrix.node-version }}
-         cache: 'npm'
-         
-     - name: Install dependencies
-       run: npm install
-    
-     - name: Crear carpeta de salida
-       run: mkdir -p output
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-     - name: Zip build output (excluyendo node_modules, .git, .github)
-       run: |
-         zip -r output/build.zip . -x "node_modules/*" ".git/*" ".github/*"
+      - name: Install dependencies
+        run: npm install
 
-     - name: Subir artifact de build
-       uses: actions/upload-artifact@v4
-       with:
+      - name: Crear carpeta de salida
+        run: mkdir output
+
+      - name: Zip build output (excluyendo node_modules, .git, .github)
+        shell: pwsh
+        run: |
+          $exclude = @('node_modules', '.git', '.github')
+          $files = Get-ChildItem -Path . -Recurse -File | Where-Object {
+            $exclude -notcontains $_.DirectoryName.Split('\')[-1]
+          }
+          Compress-Archive -Path $files.FullName -DestinationPath output/build.zip
+
+      - name: Subir artifact de build
+        uses: actions/upload-artifact@v4
+        with:
           name: build
           path: output/build.zip
 
-     - name: Veracode Upload And Scan
-       uses: veracode/veracode-uploadandscan-action@0.2.6
-       with:
+      - name: Veracode Upload And Scan
+        uses: veracode/veracode-uploadandscan-action@0.2.6
+        with:
           appname: "verademo-javascript-api"
           filepath: ./output
           version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
@@ -54,5 +53,4 @@ jobs:
           scanallnonfataltoplevelmodules: true
           deleteincompletescan: true
           debug: true
-       continue-on-error: false
-    
+        continue-on-error: false
