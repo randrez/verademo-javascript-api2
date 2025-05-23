@@ -19,21 +19,33 @@ jobs:
 
     steps:
     
-    - uses: actions/checkout@v4
-    
-    - name: Comprimir excluyendo .github, .git y node_modules
-      run: zip -r archivo.zip . -x ".github/*" ".git/*" "node_modules/*"
+     - name: Install dependencies
+       run: npm install
 
-    - name: Veracode Upload And Scan
-      uses: veracode/veracode-uploadandscan-action@0.2.6
-      with:
-        appname: "verademo-javascript-api"
-        filepath: ${{ github.repository }}
-        version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
-        vid: ${{ secrets.VERACODE_API_ID }}
-        vkey: ${{ secrets.VERACODE_API_KEY }}
-        scanallnonfataltoplevelmodules: true
-        deleteincompletescan: true
-        debug: true
-      continue-on-error: false
+     - name: Crear carpeta de salida
+       run: mkdir -p output
+
+     - name: Zip build output (excluyendo node_modules, .git, .github)
+       run: |
+         zip -r output/build.zip . -x "node_modules/*" ".git/*" ".github/*"
+
+     - name: Subir artifact de build
+       uses: actions/upload-artifact@v4
+       with:
+          name: build
+          path: output/build.zip
+
+
+     - name: Veracode Upload And Scan
+       uses: veracode/veracode-uploadandscan-action@0.2.6
+       with:
+          appname: "verademo-javascript-api"
+          filepath: ${{ github.repository }}
+          version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          scanallnonfataltoplevelmodules: true
+          deleteincompletescan: true
+          debug: true
+       continue-on-error: false
     
