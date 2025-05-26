@@ -24,37 +24,39 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Crear carpeta de salida
-        run: mkdir output
-
-      - name: Zip build output (excluyendo node_modules, .git, .github)
-        shell: pwsh
-        run: |
-          $exclude = @('node_modules', '.git', '.github')
-          $files = Get-ChildItem -Path . -Recurse -File | Where-Object {
-            $exclude -notcontains $_.DirectoryName.Split('\')[-1]
-          }
-          Compress-Archive -Path $files.FullName -DestinationPath output/build.zip
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: output/build.zip
-
   upload-scan:
     needs: checkout-and-package
     runs-on: ubuntu-latest
     steps:
-      - name: Descargar build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: output
+     - name: Crear carpeta de salida
+       run: mkdir -p output
 
-      - name: Veracode Upload And Scan
-        uses: veracode/veracode-uploadandscan-action@0.2.6
-        with:
+     - name: Zip build output (excluyendo node_modules, .git, .github)
+       run: |
+         zip -r output/build.zip . -x "node_modules/*" ".git/*" ".github/*"
+
+     - name: Subir artifact de build
+       uses: actions/upload-artifact@v4
+       with:
+          name: build
+          path: output/build.zip
+
+     - name: Veracode Upload And Scan
+       uses: veracode/veracode-uploadandscan-action@0.2.6
+       with:
+          appname: "verademo-javascript-api"
+          filepath: ./output
+          version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          scanallnonfataltoplevelmodules: true
+          deleteincompletescan: true
+          debug: true
+       continue-on-error: false
+
+     - name: Veracode Upload And Scan
+       uses: veracode/veracode-uploadandscan-action@0.2.6
+       with:
           appname: "verademo-javascript-api"
           filepath: ./output/build.zip
           version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
@@ -63,4 +65,4 @@ jobs:
           scanallnonfataltoplevelmodules: true
           deleteincompletescan: true
           debug: true
-        continue-on-error: false
+       continue-on-error: false
