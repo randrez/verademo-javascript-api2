@@ -36,8 +36,6 @@ jobs:
           }
           Compress-Archive -Path $files.FullName -DestinationPath output/build.zip
   
-  
-
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
