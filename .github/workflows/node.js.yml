@@ -15,15 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
-
       # Puedes subir la carpeta del proyecto como artefacto (excepto node_modules) para que el siguiente job la use:
       - name: Upload source artifact
         uses: actions/upload-artifact@v4
