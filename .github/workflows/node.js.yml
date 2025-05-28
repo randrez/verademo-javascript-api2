@@ -43,6 +43,14 @@ jobs:
           cd workspace
           zip -r output/build.zip . -x "node_modules/*" ".git/*" ".github/*" "output/*"
 
+                  
+      - name: veracode pipeline scan
+        uses: veracode/Veracode-pipeline-scan-action@v1.0.18
+        with:
+            vid: ${{ secrets.VERACODE_API_ID }}
+            vkey: ${{ secrets.VERACODE_API_KEY }}
+            file: ./workspace/output/build.zip
+                    
       - name: Veracode Upload And Scan
         uses: veracode/veracode-uploadandscan-action@0.2.6
         with:
