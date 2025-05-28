@@ -53,24 +53,3 @@ jobs:
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
           file: ./workspace/output/build.zip
-
-      - name: Check if artifact exists
-        run: |
-          if [ ! -f "filtered_results.json" ]; then
-            echo "Artifact filtered_results.json not found. Skipping issue creation."
-            exit 0
-          fi
-
-      - name: Descargar artefacto Veracode Pipeline Scan Results
-        uses: actions/download-artifact@v4.3.0
-        with:
-          name: Veracode Pipeline-Scan Results - .zip
-          path: ./veracode_results
-      
-      - name: Descomprimir archivo ZIP de Veracode
-        run: unzip "./veracode_results/Veracode Pipeline-Scan Results - .zip" -d ./veracode_results
-      
-      - name: Crear issues a partir de los resultados de Veracode
-        uses: veracode/veracode-flaws-to-issues@v2.2.25
-        with:
-          scan-results-json: './veracode_results/filtered_results.json'
