@@ -61,7 +61,16 @@ jobs:
             exit 0
           fi
 
-      - name: Veracode scan results to GitHub issues Action
+      - name: Descargar artefacto Veracode Pipeline Scan Results
+        uses: actions/download-artifact@v4
+        with:
+          name: Veracode Pipeline-Scan Results - .zip
+          path: ./veracode_results
+      
+      - name: Descomprimir archivo ZIP de Veracode
+        run: unzip "./veracode_results/Veracode Pipeline-Scan Results - .zip" -d ./veracode_results
+      
+      - name: Crear issues a partir de los resultados de Veracode
         uses: veracode/veracode-flaws-to-issues@v2.2.25
         with:
-          scan-results-json: 'filtered_results.json'
+          scan-results-json: './veracode_results/filtered_results.json'
