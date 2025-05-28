@@ -42,21 +42,26 @@ jobs:
         run: |
           cd workspace
           zip -r output/build.zip . -x "node_modules/*" ".git/*" ".github/*" "output/*"
-          
-      - name: veracode pipeline scan
+
+      - name: Debug build output
+        run: |
+          ls -R ./workspace/output/
+
+      - name: Veracode pipeline scan
         uses: veracode/Veracode-pipeline-scan-action@v1.0.18
         with:
-            vid: ${{ secrets.VERACODE_API_ID }}
-            vkey: ${{ secrets.VERACODE_API_KEY }}
-            file: ./workspace/output/build.zip
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          file: ./workspace/output/build.zip
 
-      - name: get scan results
-        uses: actions/download-artifact@v4.3.0
-        with:
-          name: filtered-results
+      - name: Check if artifact exists
+        run: |
+          if [ ! -f "filtered_results.json" ]; then
+            echo "Artifact filtered_results.json not found. Skipping issue creation."
+            exit 0
+          fi
 
       - name: Veracode scan results to GitHub issues Action
         uses: veracode/veracode-flaws-to-issues@v2.2.25
         with:
           scan-results-json: 'filtered_results.json'
-
