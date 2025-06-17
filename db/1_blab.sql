@@ -7,23 +7,23 @@ USE blab;
 DROP TABLE IF EXISTS blabs;
 
 CREATE TABLE blabs (
-  blabid int(11) NOT NULL AUTO_INCREMENT,
+  blabid int NOT NULL AUTO_INCREMENT,
   blabber varchar(100) NOT NULL,
   content varchar(250) DEFAULT NULL,
   timestamp datetime DEFAULT NULL,
   PRIMARY KEY (blabid)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS comments;
 
 CREATE TABLE comments (
-  commentid int(11) NOT NULL AUTO_INCREMENT,
-  blabid int(11) NOT NULL,
+  commentid int NOT NULL AUTO_INCREMENT,
+  blabid int NOT NULL,
   blabber varchar(100) NOT NULL,
   content varchar(250) DEFAULT NULL,
   timestamp datetime DEFAULT NULL,
   PRIMARY KEY (commentid)
-) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS listeners;
 
@@ -31,7 +31,7 @@ CREATE TABLE listeners (
   blabber varchar(100) NOT NULL,
   listener varchar(100) NOT NULL,
   status varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS users;
 
@@ -45,17 +45,17 @@ CREATE TABLE users (
   blab_name varchar(100) DEFAULT NULL,
   totp_secret varchar(100) DEFAULT NULL,
   PRIMARY KEY (username)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS users_history;
 
 CREATE TABLE users_history (
-  eventid int(11) NOT NULL AUTO_INCREMENT,
+  eventid int NOT NULL AUTO_INCREMENT,
   blabber varchar(100) NOT NULL,
   event varchar(250) DEFAULT NULL,
   timestamp datetime DEFAULT NULL,
   PRIMARY KEY (eventid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO blabs (blabid, blabber, content, timestamp) VALUES
 (1, 'darth', 'I find your lack of faith disturbing', '2017-09-29 16:34:21'),
