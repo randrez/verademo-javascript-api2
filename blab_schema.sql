@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS blabs;
 
 CREATE TABLE blabs (
-  blabid int(11) NOT NULL AUTO_INCREMENT,
+  blabid int NOT NULL AUTO_INCREMENT,
   blabber varchar(100) NOT NULL,
   content varchar(250) DEFAULT NULL,
   timestamp datetime DEFAULT NULL,
@@ -11,8 +11,8 @@ CREATE TABLE blabs (
 DROP TABLE IF EXISTS comments;
 
 CREATE TABLE comments (
-  commentid int(11) NOT NULL AUTO_INCREMENT,
-  blabid int(11) NOT NULL,
+  commentid int NOT NULL AUTO_INCREMENT,
+  blabid int NOT NULL,
   blabber varchar(100) NOT NULL,
   content varchar(250) DEFAULT NULL,
   timestamp datetime DEFAULT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE users (
 DROP TABLE IF EXISTS users_history;
 
 CREATE TABLE users_history (
-  eventid int(11) NOT NULL AUTO_INCREMENT,
+  eventid int NOT NULL AUTO_INCREMENT,
   blabber varchar(100) NOT NULL,
   event varchar(250) DEFAULT NULL,
   timestamp datetime DEFAULT NULL,
