@@ -23,13 +23,12 @@ jobs:
           zip -r build.zip . -x "node_modules/*" ".git/*" ".github/*"
 
       - name: Upload & Scan en Veracode
-        uses: veracode/veracode-uploadandscan-action@v1.0.10
+        uses: veracode/veracode-uploadandscan-action@0.2.8
         with:
           appname: 'verademo-javascript-api2'
           createprofile: true
           filepath: 'build.zip'
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
-          sandboxname: 'GitHubActions'
           scanpollinterval: 60
           scantimeout: 1200
