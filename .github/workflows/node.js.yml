@@ -56,5 +56,15 @@ jobs:
           vkey: ${{ secrets.VERACODE_API_KEY }}
           # Filename of the packaged application to upload and scan.
           file: ./workspace/output/build.zip 
-          # Enter true to display detailed messages in the scan results. Default is false.
-          verbose: true
+          token: ${{ github.token }}
+          json_output: true
+          json_output_file: veracode-results.json
+          summary_display: true
+          fail_on_severity: "Very High,High"
+          fail_build: true
+      
+      - name: Pipeline scan results
+        uses: actions/upload-artifact@v3
+        with:
+          name: veracode-results
+          path: veracode-results.json
