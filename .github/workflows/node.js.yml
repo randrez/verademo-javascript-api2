@@ -63,11 +63,9 @@ jobs:
           fail_build: false
         
       - name: Veracode scan results to GitHub issues
-        uses: buzzcode/veracode-flaws-to-issues@v1.0.0
+        uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
           scan-results-json: 'filtered_results.json'
-          github-token: ${{ github.token }}
-          wait-time: 2
           
       - name: Verify issues created
         run: |
