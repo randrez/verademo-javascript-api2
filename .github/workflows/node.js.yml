@@ -61,4 +61,3 @@ jobs:
           # Enter true to save the scan results in JSON format. Default is true.
           json_output: true
           filtered_json_output_file: filtered_results.json
-    
