@@ -56,9 +56,6 @@ jobs:
           token: ${{ github.token }}
           json_output: true
           json_output_file: veracode-results.json
-          filtered_json_output_file: filtered_results.json
-          summary_display: true
-          fail_on_severity: "Very High,High"
           fail_build: true
 
       - name: Pipeline scan results
