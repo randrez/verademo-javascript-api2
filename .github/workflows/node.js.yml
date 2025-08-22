@@ -55,15 +55,22 @@ jobs:
           file: ./workspace/output/build.zip 
           token: ${{ github.token }}
           json_output: true
-          json_output_file: results.json
+          json_output_file: veracode-results.json
           filtered_json_output_file: filtered_results.json
+          summary_display: true
           fail_on_severity: "Very High,High"
-          fail_build: false
+          fail_build: true
+
+      - name: Pipeline scan results
+        uses: actions/upload-artifact@v4
+        with:
+            name: veracode-results
+            path: veracode-results.json
         
       - name: Veracode scan results to GitHub issues
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
-          scan-results-json: 'filtered_results.json'
+          scan-results-json: 'veracode-results.json'
           
       - name: Verify issues created
         run: |
