@@ -1,0 +1,35 @@
+name: Veracode Upload & Scan
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install zip
+        run: sudo apt-get install zip
+
+      - name: Zip source code (excluyendo node_modules y .git)
+        run: |
+          zip -r build.zip . -x "node_modules/*" ".git/*" ".github/*"
+
+      - name: Upload & Scan en Veracode
+        uses: veracode/veracode-uploadandscan-action@v1.0.10
+        with:
+          appname: 'verademo-javascript-api2'
+          createprofile: true
+          filepath: 'build.zip'
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          sandboxname: 'GitHubActions'
+          scanpollinterval: 60
+          scantimeout: 1200
