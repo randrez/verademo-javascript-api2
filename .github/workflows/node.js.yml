@@ -47,7 +47,6 @@ jobs:
         run: |
           ls -R ./workspace/output/
 
-
       - name: Veracode Pipeline-Scan
         uses: veracode/Veracode-pipeline-scan-action@v1.0.18
         with:
@@ -61,8 +60,5 @@ jobs:
           verbose: true
           # Enter true to save the scan results in JSON format. Default is true.
           json_output: true
-          # Rename the JSON file that contains the scan results. The file is stored in the current directory. Default filename is results.json.
-          json_output_file: s_results.json
-          # Enter the filename in the current directory to save results that violate pass-fail criteria. Default is filtered_results.json.
           filtered_json_output_file: filtered_results.json
     
