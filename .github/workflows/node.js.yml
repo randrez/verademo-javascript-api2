@@ -58,6 +58,3 @@ jobs:
           file: ./workspace/output/build.zip 
           # Enter true to display detailed messages in the scan results. Default is false.
           verbose: true
-          # Enter true to save the scan results in JSON format. Default is true.
-          json_output: true
-          filtered_json_output_file: filtered_results.json
