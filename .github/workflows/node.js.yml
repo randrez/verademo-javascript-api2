@@ -68,15 +68,15 @@ jobs:
             name: veracode-results
             path: veracode-results.json
         
-      - name: Veracode scan results to GitHub issues
-        uses: veracode/veracode-flaws-to-issues@v2.1.19
-        with:
-          scan-results-json: 'veracode-results.json'
+      #- name: Veracode scan results to GitHub issues
+      #  uses: veracode/veracode-flaws-to-issues@v2.1.19
+      #  with:
+      #    scan-results-json: 'veracode-results.json'
           
-      - name: Verify issues created
-        run: |
-          echo "✅ Security issues created in GitHub"
-          echo "Check: https://github.com/${{ github.repository }}/issues"
+     # - name: Verify issues created
+     #   run: |
+     #     echo "✅ Security issues created in GitHub"
+     #     echo "Check: https://github.com/${{ github.repository }}/issues"
 
 
 
