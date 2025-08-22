@@ -65,7 +65,7 @@ jobs:
       - name: Veracode scan results to GitHub issues
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
-          scan-results-json: 'filtered_results.json'
+          scan-results-json: 'results.json'
           
       - name: Verify issues created
         run: |
