@@ -78,8 +78,25 @@ jobs:
             exit 1
           fi
           
-      - name: Upload scan results
+      - name: Pipeline scan results
         uses: actions/upload-artifact@v4
         with:
-          name: veracode-security-results
+          name: veracode-results-pipeline-scan
           path: veracode-results.json
+
+      - name: Convert to SARIF
+        uses: veracode/veracode-pipeline-scan-results-to-sarif@v2.0.4
+        with:
+          scan-type: pipeline
+          pipeline-results-json: veracode-results.json
+          output-results-sarif: veracode-results.sarif
+          finding-rule-level: 4:3:0
+          githubToken: ${{ github.token }}
+          noupload: false
+          
+      - name: Upload SARIF file (backup)
+        uses: actions/upload-artifact@v3
+        with:
+          name: sarif-results
+          path: veracode-results.sarif
+        if: always()
