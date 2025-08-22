@@ -25,7 +25,7 @@ jobs:
             !.git/
             !.github/
 
-  pipelibn-scan:
+  pipeline-scan:
     needs: checkout-and-package
     runs-on: ubuntu-latest
     steps:
