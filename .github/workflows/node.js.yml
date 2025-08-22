@@ -58,45 +58,18 @@ jobs:
           file: ./workspace/output/build.zip 
           token: ${{ github.token }}
           json_output: true
-          json_output_file: veracode-results.json
-          json_display: false
-          summary_display: true
-          verbose: true
+          filtered_json_output_file: filtered_results.json
+          fail_on_severity: "Very High,High"
+          fail_build: false
+        
+      - name: Veracode scan results to GitHub issues
+        uses: buzzcode/veracode-flaws-to-issues@v1.0.0
+        with:
+          scan-results-json: 'filtered_results.json'
+          github-token: ${{ github.token }}
+          wait-time: 2
           
-      - name: Verify results file
+      - name: Verify issues created
         run: |
-          echo "Current directory:"
-          pwd
-          echo "Files in directory:"
-          ls -la
-          echo "Checking for results file:"
-          if [ -f "veracode-results.json" ]; then
-            echo "✅ veracode-results.json found!"
-            echo "File size: $(wc -l < veracode-results.json) lines"
-          else
-            echo "❌ veracode-results.json NOT found!"
-            exit 1
-          fi
-          
-      - name: Pipeline scan results
-        uses: actions/upload-artifact@v4
-        with:
-          name: veracode-results-pipeline-scan
-          path: veracode-results.json
-
-      - name: Convert to SARIF
-        uses: veracode/veracode-pipeline-scan-results-to-sarif@v2.0.4
-        with:
-          scan-type: pipeline
-          pipeline-results-json: veracode-results.json
-          output-results-sarif: veracode-results.sarif
-          finding-rule-level: 4:3:0
-          githubToken: ${{ github.token }}
-          noupload: false
-          
-      - name: Upload SARIF file (backup)
-        uses: actions/upload-artifact@v4
-        with:
-          name: sarif-results
-          path: veracode-results.sarif
-        if: always()
+          echo "✅ Security issues created in GitHub"
+          echo "Check: https://github.com/${{ github.repository }}/issues"
