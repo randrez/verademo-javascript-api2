@@ -50,14 +50,12 @@ jobs:
       - name: Veracode Pipeline-Scan
         uses: veracode/Veracode-pipeline-scan-action@v1.0.18
         with:
-          # vid
           vid: ${{ secrets.VERACODE_API_ID }}
-          # vkey
           vkey: ${{ secrets.VERACODE_API_KEY }}
-          # Filename of the packaged application to upload and scan.
           file: ./workspace/output/build.zip 
           token: ${{ github.token }}
           json_output: true
+          json_output_file: results.json
           filtered_json_output_file: filtered_results.json
           fail_on_severity: "Very High,High"
           fail_build: false
@@ -65,7 +63,7 @@ jobs:
       - name: Veracode scan results to GitHub issues
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
-          scan-results-json: 'results.json'
+          scan-results-json: 'filtered_results.json'
           
       - name: Verify issues created
         run: |
