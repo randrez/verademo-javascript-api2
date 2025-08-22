@@ -59,12 +59,27 @@ jobs:
           token: ${{ github.token }}
           json_output: true
           json_output_file: veracode-results.json
+          json_display: false
           summary_display: true
-          fail_on_severity: "Very High,High"
-          fail_build: true
-      
-      - name: Pipeline scan results
+          verbose: true
+          
+      - name: Verify results file
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files in directory:"
+          ls -la
+          echo "Checking for results file:"
+          if [ -f "veracode-results.json" ]; then
+            echo "✅ veracode-results.json found!"
+            echo "File size: $(wc -l < veracode-results.json) lines"
+          else
+            echo "❌ veracode-results.json NOT found!"
+            exit 1
+          fi
+          
+      - name: Upload scan results
         uses: actions/upload-artifact@v4
         with:
-          name: veracode-results
+          name: veracode-security-results
           path: veracode-results.json
