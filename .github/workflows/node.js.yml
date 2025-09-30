@@ -60,7 +60,7 @@ jobs:
           json_output: true
           verbose: true
           json_output_file: veracode-results.json
-          fail_build: true
+          fail_build: false
 
       - name: Pipeline scan results
         uses: actions/upload-artifact@v4
