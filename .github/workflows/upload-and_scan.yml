@@ -25,7 +25,7 @@ jobs:
       - name: Upload & Scan en Veracode
         uses: veracode/veracode-uploadandscan-action@0.2.8
         with:
-          appname: 'verademo-javascript-api2'
+          appname: 'verademo-javascript-api-2'
           createprofile: true
           filepath: 'build.zip'
           vid: ${{ secrets.VERACODE_API_ID }}
