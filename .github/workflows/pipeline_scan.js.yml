@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Veracode pipeline scan
 
 permissions:
   issues: write
@@ -6,7 +6,10 @@ permissions:
   
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - feature/**
+      - hotfix/**
+  workflow_dispatch:
 
 jobs:
   checkout-and-package:
@@ -68,15 +71,16 @@ jobs:
             name: veracode-results
             path: veracode-results.json
         
-      #- name: Veracode scan results to GitHub issues
-      #  uses: veracode/veracode-flaws-to-issues@v2.1.19
-      #  with:
-      #    scan-results-json: 'veracode-results.json'
-          
-     # - name: Verify issues created
-     #   run: |
-     #     echo "✅ Security issues created in GitHub"
-     #     echo "Check: https://github.com/${{ github.repository }}/issues"
+      - name: Create GitHub Issues for Veracode findings
+        uses: veracode/veracode-flaws-to-issues@v2.1.19
+        with:
+          scan-results-json: 'veracode-results.json'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify issues created
+        run: |
+          echo "✅ Security issues created from Veracode results"
+          echo "Check: https://github.com/${{ github.repository }}/issues"
 
 
 
