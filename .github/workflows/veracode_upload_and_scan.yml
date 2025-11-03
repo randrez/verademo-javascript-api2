@@ -1,4 +1,4 @@
-name: Veracode Upload & Scan
+name: Veracode Upload & Scan(Policy Scan)
 
 on:
   push:
@@ -30,5 +30,4 @@ jobs:
           filepath: 'build.zip'
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
-          scanpollinterval: 60
           scantimeout: 1200

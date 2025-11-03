@@ -1,0 +1,38 @@
+name: Veracode SCA Scan (multi-branch)
+
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  veracode-sca-task:
+    runs-on: ubuntu-latest
+    name: Scan repository with Veracode SCA
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Run Veracode SCA
+        env:
+          SRCCLR_API_TOKEN: ${{ secrets.VERACODE_AGENT_TOKEN }}
+        uses: veracode/veracode-sca@v2.1.10
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          quick: true
+          create-issues: true 

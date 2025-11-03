@@ -1,13 +1,4 @@
-# =========================================
-# Veracode Configuration File (.veracode.yml)
-# Proyecto: Node.js
-# Estrategia de ramas:
-#   - feature/* : Pipeline Scan + SCA
-#   - develop   : Sandbox Scan + SCA
-#   - main      : Upload & Policy Scan
-# =========================================
 
-# --- 1️⃣ FEATURE BRANCHES: Pipeline Scan + SCA ---
 veracode_pipeline_scan_feature:
   push:
     trigger: true

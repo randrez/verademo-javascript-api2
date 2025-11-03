@@ -1,0 +1,39 @@
+name: Veracode sandbox Scan
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+  issues: write
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  sandbox-scan:
+     runs-on: ubuntu-latest
+
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install zip
+        run: sudo apt-get install zip
+
+      - name: Zip source code (excluyendo node_modules y .git)
+        run: |
+          zip -r build.zip . -x "node_modules/*" ".git/*" ".github/*"
+
+      - name: Sandbox Scan en Veracode
+        uses: veracode/veracode-uploadandscan-action@0.2.8
+        with:
+          appname: 'verademo-javascript-api-2'
+          createprofile: true
+          createsandbox: true
+          sandboxname: 'Sandbox-Develop'
+          filepath: 'build.zip'
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          scantimeout: 1200
