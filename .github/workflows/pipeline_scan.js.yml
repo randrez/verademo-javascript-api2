@@ -1,8 +1,15 @@
-name: Node.js CI
+name: Veracode pipeline scan
 
+permissions:
+  issues: write
+  contents: read
+  
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - feature/**
+      - hotfix/**
+  workflow_dispatch:
 
 jobs:
   checkout-and-package:
@@ -25,7 +32,7 @@ jobs:
             !.git/
             !.github/
 
-  upload-scan:
+  pipeline-scan:
     needs: checkout-and-package
     runs-on: ubuntu-latest
     steps:
@@ -47,9 +54,40 @@ jobs:
         run: |
           ls -R ./workspace/output/
 
-      - name: Veracode pipeline scan
+      - name: Veracode Pipeline-Scan
         uses: veracode/Veracode-pipeline-scan-action@v1.0.18
         with:
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
-          file: ./workspace/output/build.zip
+          file: ./workspace/output/build.zip 
+          json_output: true
+          verbose: true
+          json_output_file: veracode-results.json
+          fail_build: false
+
+      - name: Pipeline scan results
+        uses: actions/upload-artifact@v4
+        with:
+            name: veracode-results
+            path: veracode-results.json
+        
+      - name: Create GitHub Issues for Veracode findings
+        uses: veracode/veracode-flaws-to-issues@v2.1.19
+        with:
+          scan-results-json: 'veracode-results.json'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify issues created
+        run: |
+          echo "✅ Security issues created from Veracode results"
+          echo "Check: https://github.com/${{ github.repository }}/issues"
+
+
+
+
+
+
+
+
+
+
