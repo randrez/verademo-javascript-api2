@@ -6,6 +6,7 @@ run-name: Veracode Register Build
 on:
   repository_dispatch:
     types: [register-build]
+  workflow_dispatch:
 
 jobs:
   register:
