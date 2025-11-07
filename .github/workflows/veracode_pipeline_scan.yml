@@ -7,8 +7,8 @@ permissions:
 on:
   push:
     branches:
-      - feature/**
-      - hotfix/**
+      - master
+
   workflow_dispatch:
 
 jobs:
