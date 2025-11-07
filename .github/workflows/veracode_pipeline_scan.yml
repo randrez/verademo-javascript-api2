@@ -1,4 +1,4 @@
-name: Veracode pipeline scan
+name: Veracode pipeline scan manual
 
 permissions:
   issues: write
