@@ -24,23 +24,3 @@ jobs:
         with:
           name: veracode-artifact
           path: app.zip
-
-      # 🚀 Enviar evento al repo de integración Veracode
-      - name: Dispatch to Veracode Integration Repository
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: randrez/veracode
-          event-type: register-build
-          client-payload: |
-            {
-              "repository": "${{ github.repository }}",
-              "sha": "${{ github.sha }}",
-              "ref": "${{ github.ref }}",
-              "user_config": {
-                "sandbox_scan": {
-                  "branch": "main"
-                },
-                "issue_trigger_flow": false
-              }
-            }
