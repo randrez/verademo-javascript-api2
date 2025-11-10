@@ -1,2 +1,3 @@
 veracode_static_scan:
   artifact_file: veracode-artifact/app.zip
+  use_custom_workflow: veracode-build
