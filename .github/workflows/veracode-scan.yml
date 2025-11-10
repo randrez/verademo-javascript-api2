@@ -6,6 +6,8 @@ on:
   push:
     branches: [ main ]
   pull_request:
+    branches: [ main ]  # ← AGREGA ESTO
+
 
 jobs:
   build_and_scan:
