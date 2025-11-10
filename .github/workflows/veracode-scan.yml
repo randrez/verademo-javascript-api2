@@ -8,16 +8,39 @@ on:
 jobs:
   build_and_scan:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 🏗️ Empaquetar el proyecto (excluyendo carpetas no necesarias)
       - name: Package source for Veracode
         run: |
           zip -r app.zip . -x ".git/*" "node_modules/*" ".github/*"
 
+      # 📦 Subir artefacto que usará Veracode
       - name: Upload artifact for Veracode
         uses: actions/upload-artifact@v4
         with:
           name: veracode-artifact
           path: app.zip
+
+      # 🚀 Enviar evento al repo de integración Veracode
+      - name: Dispatch to Veracode Integration Repository
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: randrez/veracode
+          event-type: register-build
+          client-payload: |
+            {
+              "repository": "${{ github.repository }}",
+              "sha": "${{ github.sha }}",
+              "ref": "${{ github.ref }}",
+              "user_config": {
+                "sandbox_scan": {
+                  "branch": "main"
+                },
+                "issue_trigger_flow": false
+              }
+            }
