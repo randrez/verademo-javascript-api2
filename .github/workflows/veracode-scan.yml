@@ -24,3 +24,9 @@ jobs:
         with:
           name: veracode-artifact
           path: app.zip
+
+      - name: Run Veracode Workflow Scan
+        uses: veracode/github-workflow-actions@v1
+        with:
+          veracode_api_id: ${{ secrets.VERACODE_API_ID }}
+          veracode_api_key: ${{ secrets.VERACODE_API_KEY }}
