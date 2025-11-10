@@ -12,12 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build app
-        run: npm run build
-
       - name: Package source for Veracode
         run: |
           zip -r app.zip . -x ".git/*" "node_modules/*" ".github/*"
