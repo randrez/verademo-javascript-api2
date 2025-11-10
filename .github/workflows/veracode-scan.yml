@@ -1,6 +1,8 @@
 name: Veracode Scan
 
 on:
+  repository_dispatch:
+    types: [veracode-build] 
   push:
     branches: [ main ]
   pull_request:
