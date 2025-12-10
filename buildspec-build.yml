@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Preparando proyecto para Veracode"
+
+  build:
+    commands:
+      - echo "Creando ZIP para Veracode"
+      - zip -r veracode.zip . \
+          -x "node_modules/*" \
+          -x ".git/*" \
+          -x ".aws/*"
+
+artifacts:
+  files:
+    - veracode.zip
