@@ -16,31 +16,31 @@ phases:
     commands:
       - echo "Preparando directorio del wrapper"
       - mkdir -p $VERACODE_WRAPPER_DIR
-
-      - METADATA_URL="https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/maven-metadata.xml"
+      - export METADATA_URL="https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/maven-metadata.xml"
       - echo "Descargando metadata: $METADATA_URL"
       - curl -s $METADATA_URL -o metadata.xml
-
-      - VERSION=$(grep -oPm1 "(?<=<latest>)[^<]+" metadata.xml)
+      - export VERSION=$(grep -oPm1 "(?<=<latest>)[^<]+" metadata.xml)
       - echo "Última versión detectada: $VERSION"
-
-      - ZIP_URL="https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/$VERSION/vosp-api-wrappers-java-$VERSION-dist.zip"
+      - export ZIP_URL="https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/$VERSION/vosp-api-wrappers-java-$VERSION-dist.zip"
       - echo "Descargando wrapper: $ZIP_URL"
       - curl -L $ZIP_URL -o $VERACODE_WRAPPER_DIR/dist.zip
-
       - echo "Extrayendo wrapper"
       - unzip -o $VERACODE_WRAPPER_DIR/dist.zip -d $VERACODE_WRAPPER_DIR
-
-      - WRAPPER_JAR=$(find $VERACODE_WRAPPER_DIR -name "VeracodeJavaAPI.jar" | head -n 1)
+      - export WRAPPER_JAR=$(find $VERACODE_WRAPPER_DIR -name "VeracodeJavaAPI.jar" | head -n 1)
       - if [ -z "$WRAPPER_JAR" ]; then echo "No se encontró VeracodeJavaAPI.jar"; exit 1; fi
-
       - cp "$WRAPPER_JAR" ./VeracodeJavaAPI.jar
       - ls -la ./VeracodeJavaAPI.jar
 
   build:
     commands:
-      - echo "Verificando que veracode.zip exista en el directorio de trabajo"
+      - echo "Verificando que veracode.zip exista"
       - if [ ! -f veracode.zip ]; then echo "veracode.zip no encontrado"; ls -la; exit 1; fi
-
       - echo "Iniciando upload+scan en Veracode"
-      - java -jar VeracodeJavaAPI.jar -action uploadandscan -appname "$VERACODE_APP_NAME" -createprofile true -version "build-$CODEBUILD_BUILD_ID" -filepath veracode.zip -vid $VERACODE_API_ID -vkey $VERACODE_API_KEY
+      - java -jar VeracodeJavaAPI.jar \
+          -action uploadandscan \
+          -appname "$VERACODE_APP_NAME" \
+          -createprofile true \
+          -version "build-$CODEBUILD_BUILD_ID" \
+          -filepath veracode.zip \
+          -vid $VERACODE_API_ID \
+          -vkey $VERACODE_API_KEY
