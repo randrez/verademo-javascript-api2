@@ -11,8 +11,7 @@ phases:
     runtime-versions:
       java: corretto11
     commands:
-      - echo "Instalando utilidades necesarias"
-      - yum install -y unzip curl jq || true
+       - echo "Skipping build step (not required for this project)"
 
   pre_build:
     commands:
