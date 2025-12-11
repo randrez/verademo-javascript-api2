@@ -3,15 +3,14 @@ version: 0.2
 env:
   variables:
     VERACODE_WRAPPER_DIR: ".veracode"
-    VERACODE_APP_NAME: "verademo-node-js"        # cambia por el nombre de app en Veracode si quieres
-    # VERSION se construye dinámicamente usando CODEBUILD_BUILD_ID dentro del build
+    VERACODE_APP_NAME: "verademo-node-js"
 
 phases:
   install:
     runtime-versions:
       java: corretto11
     commands:
-       - echo "Skipping build step (not required for this project)"
+      - echo "Skipping build step (not required for this project)"
 
   pre_build:
     commands:
@@ -34,6 +33,7 @@ phases:
 
       - WRAPPER_JAR=$(find $VERACODE_WRAPPER_DIR -name "VeracodeJavaAPI.jar" | head -n 1)
       - if [ -z "$WRAPPER_JAR" ]; then echo "No se encontró VeracodeJavaAPI.jar"; exit 1; fi
+
       - cp "$WRAPPER_JAR" ./VeracodeJavaAPI.jar
       - ls -la ./VeracodeJavaAPI.jar
 
@@ -43,14 +43,4 @@ phases:
       - if [ ! -f veracode.zip ]; then echo "veracode.zip no encontrado"; ls -la; exit 1; fi
 
       - echo "Iniciando upload+scan en Veracode"
-      - java -jar VeracodeJavaAPI.jar \
-          -action uploadandscan \
-          -appname "$VERACODE_APP_NAME" \
-          -createprofile true \
-          -version "build-$CODEBUILD_BUILD_ID" \
-          -filepath veracode.zip \
-          -vid $VERACODE_API_ID \
-          -vkey $VERACODE_API_KEY
-
-      # Opcional: si el wrapper soporta una bandera para fallar cuando la política se incumple:
-      # - agregar -failbuild true (revisa documentación de la versión del wrapper)
+      - java -jar VeracodeJavaAPI.jar -action uploadandscan -appname "$VERACODE_APP_NAME" -createprofile true -version "build-$CODEBUILD_BUILD_ID" -filepath veracode.zip -vid $VERACODE_API_ID -vkey $VERACODE_API_KEY
