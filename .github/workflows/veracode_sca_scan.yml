@@ -10,13 +10,6 @@ on:
     branches:
       - develop
       - features/*
-  pull_request:
-    branches:
-      - develop
-      - features/*
-    types:
-      - opened
-      - synchronize
 
 jobs:
   veracode-sca-task:
@@ -35,3 +28,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           quick: true
           create-issues: true 
+
+      
