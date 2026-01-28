@@ -8,8 +8,8 @@ permissions:
 on:
   push:
     branches:
-      - develop
-      - features/*
+      - feature/*
+      - hotfix/*
 
 jobs:
   veracode-sca-task:
