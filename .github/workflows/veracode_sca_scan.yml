@@ -8,10 +8,12 @@ permissions:
 on:
   push:
     branches:
-      - master
+      - develop
+      - features/*
   pull_request:
     branches:
-      - master
+      - develop
+      - features/*
     types:
       - opened
       - synchronize
