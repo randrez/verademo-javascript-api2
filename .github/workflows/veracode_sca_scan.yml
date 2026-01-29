@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Scan repository with Veracode SCA
 
+    # 🔑 PERMISOS EFECTIVOS (OBLIGATORIO)
     permissions:
       contents: read
       issues: write
