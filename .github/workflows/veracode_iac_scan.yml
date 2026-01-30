@@ -28,6 +28,6 @@ jobs:
             command: "scan" 
             type: "directory"
             source: "./"
-            format: "json"
+            format: "json,table"
             debug: false
             fail_build: true
