@@ -10,6 +10,8 @@ on:
   push:
     branches:
       - feature/*
+      - hotfix/*
+      - develop
 
 jobs:
     Veracode-container_iac_secrets-scan:
