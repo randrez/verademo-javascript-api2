@@ -66,6 +66,4 @@ jobs:
           vkey: ${{ secrets.VERACODE_API_KEY}}
           sandboxname: 'Sandbox-Develop-Node-js'
           filepath: ./workspace/output/build.zip
-          vid: ${{ secrets.VERACODE_API_ID }}
-          vkey: ${{ secrets.VERACODE_API_KEY }}
           scantimeout: 1200
