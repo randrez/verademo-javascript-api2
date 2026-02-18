@@ -57,12 +57,14 @@ jobs:
           ls -R ./workspace/output/
 
       - name: Sandbox Scan en Veracode
-        uses: veracode/veracode-uploadandscan-action@0.2.8
+        uses: veracode/veracode-uploadandscan-action@0.2.11
         with:
-          appname: 'verademo-javascript-api-2'
+          appname: 'verademo-nosw-ja'
           createprofile: true
           createsandbox: true
-          sandboxname: 'Sandbox-Develop'
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY}}
+          sandboxname: 'Sandbox-Develop-Node-js'
           filepath: ./workspace/output/build.zip
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
