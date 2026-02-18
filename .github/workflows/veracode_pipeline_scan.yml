@@ -1,4 +1,4 @@
-name: Veracode pipeline scan
+name: Veracode pipeline scan manual
 
 permissions:
   issues: write
@@ -7,8 +7,9 @@ permissions:
 on:
   push:
     branches:
-      - feature/**
-      - hotfix/**
+      - feature/*
+      - hotfix/*
+
   workflow_dispatch:
 
 jobs:
